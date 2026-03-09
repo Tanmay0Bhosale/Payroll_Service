@@ -12,16 +12,23 @@ public class EmployeePayrollService {
 
             Connection connection = DriverManager.getConnection(url, user, password);
 
-            String query = "UPDATE employee_payroll SET salary = ? WHERE name = ?";
+            String query = "SELECT * FROM employee_payroll WHERE start_date BETWEEN ? AND ?";
 
             PreparedStatement ps = connection.prepareStatement(query);
 
-            ps.setDouble(1, 3000000);
-            ps.setString(2, "Terisa");
+            ps.setDate(1, Date.valueOf("2020-01-01"));
+            ps.setDate(2, Date.valueOf("2023-12-31"));
 
-            int rows = ps.executeUpdate();
+            ResultSet rs = ps.executeQuery();
 
-            System.out.println("Rows Updated: " + rows);
+            while (rs.next()) {
+
+                System.out.println(
+                        rs.getInt("id") + " " +
+                        rs.getString("name") + " " +
+                        rs.getDouble("salary") + " " +
+                        rs.getDate("start_date"));
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
