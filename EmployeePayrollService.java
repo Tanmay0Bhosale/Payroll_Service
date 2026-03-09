@@ -14,17 +14,11 @@ public class EmployeePayrollService {
 
             Statement statement = connection.createStatement();
 
-            ResultSet rs = statement.executeQuery("SELECT * FROM employee_payroll");
+            String query = "UPDATE employee_payroll SET salary = 3000000 WHERE name='Terisa'";
 
-            while (rs.next()) {
+            int rows = statement.executeUpdate(query);
 
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                double salary = rs.getDouble("salary");
-                Date startDate = rs.getDate("start_date");
-
-                System.out.println(id + " " + name + " " + salary + " " + startDate);
-            }
+            System.out.println("Rows Updated: " + rows);
 
         } catch (Exception e) {
             e.printStackTrace();
