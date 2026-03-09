@@ -12,22 +12,30 @@ public class EmployeePayrollService {
 
             Connection connection = DriverManager.getConnection(url, user, password);
 
-            String query = "SELECT * FROM employee_payroll WHERE start_date BETWEEN ? AND ?";
+            String query = """
+            SELECT gender,
+            SUM(salary) AS total,
+            AVG(salary) AS average,
+            MIN(salary) AS minimum,
+            MAX(salary) AS maximum,
+            COUNT(*) AS count
+            FROM employee_payroll
+            GROUP BY gender
+            """;
 
-            PreparedStatement ps = connection.prepareStatement(query);
+            Statement statement = connection.createStatement();
 
-            ps.setDate(1, Date.valueOf("2020-01-01"));
-            ps.setDate(2, Date.valueOf("2023-12-31"));
-
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = statement.executeQuery(query);
 
             while (rs.next()) {
 
                 System.out.println(
-                        rs.getInt("id") + " " +
-                        rs.getString("name") + " " +
-                        rs.getDouble("salary") + " " +
-                        rs.getDate("start_date"));
+                        "Gender: " + rs.getString("gender") +
+                        " SUM: " + rs.getDouble("total") +
+                        " AVG: " + rs.getDouble("average") +
+                        " MIN: " + rs.getDouble("minimum") +
+                        " MAX: " + rs.getDouble("maximum") +
+                        " COUNT: " + rs.getInt("count"));
             }
 
         } catch (Exception e) {
