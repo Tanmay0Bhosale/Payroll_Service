@@ -12,11 +12,14 @@ public class EmployeePayrollService {
 
             Connection connection = DriverManager.getConnection(url, user, password);
 
-            Statement statement = connection.createStatement();
+            String query = "UPDATE employee_payroll SET salary = ? WHERE name = ?";
 
-            String query = "UPDATE employee_payroll SET salary = 3000000 WHERE name='Terisa'";
+            PreparedStatement ps = connection.prepareStatement(query);
 
-            int rows = statement.executeUpdate(query);
+            ps.setDouble(1, 3000000);
+            ps.setString(2, "Terisa");
+
+            int rows = ps.executeUpdate();
 
             System.out.println("Rows Updated: " + rows);
 
